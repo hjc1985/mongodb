@@ -1,0 +1,794 @@
+<!DOCTYPE html><html><head><title>MongoDB常用操作命令大全</title><meta charset='utf-8'><link href='https://dn-maxiang.qbox.me/res-min/themes/marxico.css' rel='stylesheet'><style>
+.note-content  {font-family: "Helvetica Neue", Arial, "Hiragino Sans GB", STHeiti, "Microsoft YaHei", "WenQuanYi Micro Hei", SimSun, Song, sans-serif;}
+
+</style></head><body><div id='preview-contents' class='note-content'>
+                        
+                    
+
+
+
+<h1 id="mongodb常用操作命令大全">MongoDB常用操作命令大全</h1>
+
+<div><div class="toc"><div class="toc">
+<ul>
+<li><a href="#mongodb常用操作命令大全">MongoDB常用操作命令大全</a><ul>
+<li><a href="#一-数据库常用命令">一. 数据库常用命令</a><ul>
+<li><a href="#1help查看命令提示">1、Help查看命令提示</a></li>
+<li><a href="#2切换创建数据库">2、切换/创建数据库</a></li>
+<li><a href="#3查询所有数据库">3、查询所有数据库</a></li>
+<li><a href="#4删除当前使用数据库">4、删除当前使用数据库</a></li>
+<li><a href="#5从指定主机上克隆数据库">5.从指定主机上克隆数据库</a></li>
+<li><a href="#6从指定的机器上复制指定数据库数据到某个数据库">6.从指定的机器上复制指定数据库数据到某个数据库</a></li>
+<li><a href="#7修复当前数据库">7、修复当前数据库</a></li>
+<li><a href="#8查看当前使用的数据库">8、查看当前使用的数据库</a></li>
+<li><a href="#9显示当前db状态">9、显示当前db状态</a></li>
+<li><a href="#10当前db版本">10、当前db版本</a></li>
+<li><a href="#11查看当前db的链接机器地址">11、查看当前db的链接机器地址</a></li>
+</ul>
+</li>
+<li><a href="#二collection聚集集合">二、Collection聚集集合</a><ul>
+<li><a href="#1创建一个聚集集合table">1、创建一个聚集集合（table）</a></li>
+<li><a href="#2得到指定名称的聚集集合table">2、得到指定名称的聚集集合（table）</a></li>
+<li><a href="#3得到当前db的所有聚集集合">3、得到当前db的所有聚集集合</a></li>
+<li><a href="#4显示当前db所有聚集索引的状态">4、显示当前db所有聚集索引的状态</a></li>
+</ul>
+</li>
+<li><a href="#三用户相关">三、用户相关</a><ul>
+<li><a href="#1添加一个用户">1、添加一个用户</a></li>
+<li><a href="#2数据库认证安全模式">2、数据库认证安全模式</a></li>
+<li><a href="#3显示当前所有用户">3、显示当前所有用户</a></li>
+<li><a href="#4删除用户">4、删除用户</a></li>
+</ul>
+</li>
+<li><a href="#四聚集集合查询">四、聚集集合查询</a><ul>
+<li><a href="#1查询所有记录">1、查询所有记录</a></li>
+<li><a href="#2查询去掉后的当前聚集集合中的某列的重复数据">2、查询去掉后的当前聚集集合中的某列的重复数据</a></li>
+<li><a href="#3查询age-22的记录">3、查询age = 22的记录</a></li>
+<li><a href="#4查询age-22的记录">4、查询age &gt; 22的记录</a></li>
+<li><a href="#5查询age-22的记录">5、查询age &lt; 22的记录</a></li>
+<li><a href="#6查询age-25的记录">6、查询age &gt;= 25的记录</a></li>
+<li><a href="#7查询age-25的记录">7、查询age &lt;= 25的记录</a></li>
+<li><a href="#8查询age-23-并且-age-26">8、查询age &gt;= 23 并且 age &lt;= 26</a></li>
+<li><a href="#9查询name中包含-mongo的数据">9、查询name中包含 mongo的数据</a></li>
+<li><a href="#10查询name中以mongo开头的">10、查询name中以mongo开头的</a></li>
+<li><a href="#11查询指定列nameage数据">11、查询指定列name、age数据</a></li>
+<li><a href="#12查询指定列nameage数据age-25">12、查询指定列name，age数据,age &gt; 25</a></li>
+<li><a href="#13按照年龄排序">13、按照年龄排序</a></li>
+<li><a href="#14查询name-zhangsan-age-22的数据">14、查询name = zhangsan, age = 22的数据</a></li>
+<li><a href="#15查询前5条数据">15、查询前5条数据</a></li>
+<li><a href="#16查询10条以后的数据">16、查询10条以后的数据</a></li>
+<li><a href="#17查询在5-10之间的数据">17、查询在5-10之间的数据</a></li>
+<li><a href="#18or与-查询">18、or与 查询</a></li>
+<li><a href="#19查询第一条数据">19、查询第一条数据</a></li>
+<li><a href="#20查询某个结果集的记录条数">20、查询某个结果集的记录条数</a></li>
+<li><a href="#21按照某列进行排序">21、按照某列进行排序</a></li>
+</ul>
+</li>
+<li><a href="#五索引">五、索引</a><ul>
+<li><a href="#1创建索引">1、创建索引</a></li>
+<li><a href="#2查询当前聚集集合所有索引">2、查询当前聚集集合所有索引</a></li>
+<li><a href="#3查看总索引记录大小">3、查看总索引记录大小</a></li>
+<li><a href="#4读取当前集合的所有index信息">4、读取当前集合的所有index信息</a></li>
+<li><a href="#5删除指定索引">5、删除指定索引</a></li>
+<li><a href="#6删除所有索引索引">6、删除所有索引索引</a></li>
+</ul>
+</li>
+<li><a href="#六-修改添加删除集合数据">六 、修改、添加、删除集合数据</a><ul>
+<li><a href="#1添加的数据的数据列没有固定根据添加的数据为准">1、添加的数据的数据列没有固定,根据添加的数据为准</a></li>
+<li><a href="#2修改">2、修改</a></li>
+<li><a href="#3删除">3、删除</a></li>
+<li><a href="#4查询修改删除">4、查询修改删除</a></li>
+</ul>
+</li>
+<li><a href="#七语句块操作">七、语句块操作</a><ul>
+<li><a href="#1简单hello-world">1、简单Hello World</a></li>
+<li><a href="#2将一个对象转换成json">2、将一个对象转换成json</a></li>
+<li><a href="#3循环添加数据">3、循环添加数据</a></li>
+<li><a href="#4find-游标查询">4、find 游标查询</a></li>
+<li><a href="#5foreach迭代循环">5、forEach迭代循环</a></li>
+<li><a href="#6将find游标当数组处理">6、将find游标当数组处理</a></li>
+<li><a href="#7将find游标转换成数组">7、将find游标转换成数组</a></li>
+<li><a href="#8定制我们自己的查询结果">8、定制我们自己的查询结果</a></li>
+<li><a href="#9foreach传递函数显示信息">9、forEach传递函数显示信息</a></li>
+</ul>
+</li>
+<li><a href="#八其他">八、其他</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+
+<h2 id="一-数据库常用命令">一. 数据库常用命令</h2>
+
+
+
+<h3 id="1help查看命令提示">1、Help查看命令提示</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs stata"><div class="hljs-line"><span class="hljs-keyword">help</span> <span class="hljs-keyword">db</span>.<span class="hljs-keyword">help</span>();
+</div><div class="hljs-line"> <span class="hljs-keyword">db</span>.yourColl.<span class="hljs-keyword">help</span>();
+</div><div class="hljs-line">  <span class="hljs-keyword">db</span>.youColl.find().<span class="hljs-keyword">help</span>(); 
+</div><div class="hljs-line">  rs.<span class="hljs-keyword">help</span>();
+</div></code></pre>
+
+
+
+<h3 id="2切换创建数据库">2、切换/创建数据库</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs php"><div class="hljs-line"><span class="hljs-keyword">use</span> <span class="hljs-title">yourDB</span>;     <span class="hljs-comment">//当创建一个集合(table)的时候会自动创建当前数据库</span>
+</div></code></pre>
+
+
+
+<h3 id="3查询所有数据库">3、查询所有数据库</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs mipsasm"><div class="hljs-line"><span class="hljs-keyword">show </span>dbs<span class="hljs-comment">;</span>
+</div></code></pre>
+
+
+
+<h3 id="4删除当前使用数据库">4、删除当前使用数据库</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs abnf"><div class="hljs-line">db.dropDatabase()<span class="hljs-comment">;</span>
+</div></code></pre>
+
+
+
+<h3 id="5从指定主机上克隆数据库">5.从指定主机上克隆数据库</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs lsl"><div class="hljs-line">db.cloneDatabase(“<span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>”);  <span class="hljs-comment">//将指定机器上的数据库的数据克隆到当前数据库</span>
+</div></code></pre>
+
+
+
+<h3 id="6从指定的机器上复制指定数据库数据到某个数据库">6.从指定的机器上复制指定数据库数据到某个数据库</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs less"><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.copyDatabase</span>(<span class="hljs-string">"mydb"</span>, <span class="hljs-string">"temp"</span>, <span class="hljs-string">"127.0.0.1"</span>);   <span class="hljs-comment">//将本机的mydb的数据复制到temp数据库中</span>
+</div></code></pre>
+
+
+
+<h3 id="7修复当前数据库">7、修复当前数据库</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs abnf"><div class="hljs-line">db.repairDatabase()<span class="hljs-comment">;</span>
+</div></code></pre>
+
+
+
+<h3 id="8查看当前使用的数据库">8、查看当前使用的数据库</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs stata"><div class="hljs-line"><span class="hljs-keyword">db</span>.getName();       <span class="hljs-comment">//</span> <span class="hljs-keyword">db</span>; <span class="hljs-keyword">db</span>和getName方法是一样的效果，都可以查询当前使用的数据库
+</div></code></pre>
+
+
+
+<h3 id="9显示当前db状态">9、显示当前db状态</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs abnf"><div class="hljs-line">db.stats()<span class="hljs-comment">;</span>
+</div></code></pre>
+
+
+
+<h3 id="10当前db版本">10、当前db版本</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs stata"><div class="hljs-line"><span class="hljs-keyword">db</span>.<span class="hljs-keyword">version</span>();
+</div></code></pre>
+
+
+
+<h3 id="11查看当前db的链接机器地址">11、查看当前db的链接机器地址</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs abnf"><div class="hljs-line">db.getMongo()<span class="hljs-comment">;</span>
+</div></code></pre>
+
+
+
+<h2 id="二collection聚集集合">二、Collection聚集集合</h2>
+
+
+
+<h3 id="1创建一个聚集集合table">1、创建一个聚集集合（table）</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs less"><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.createCollection</span>(“collName”, {<span class="hljs-attribute">size</span>: <span class="hljs-number">20</span>, <span class="hljs-attribute">capped</span>: <span class="hljs-number">5</span>, <span class="hljs-attribute">max</span>: <span class="hljs-number">100</span>});   <span class="hljs-comment">//创建成功会显示{“ok”:1}</span> 
+</div><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.collName</span><span class="hljs-selector-class">.isCapped</span>();     <span class="hljs-comment">//判断集合是否为定容量</span>
+</div></code></pre>
+
+
+
+<h3 id="2得到指定名称的聚集集合table">2、得到指定名称的聚集集合（table）</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs abnf"><div class="hljs-line">db.getCollection(<span class="hljs-string">"account"</span>)<span class="hljs-comment">;</span>
+</div></code></pre>
+
+
+
+<h3 id="3得到当前db的所有聚集集合">3、得到当前db的所有聚集集合</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs abnf"><div class="hljs-line">db.getCollectionNames()<span class="hljs-comment">;</span>
+</div></code></pre>
+
+
+
+<h3 id="4显示当前db所有聚集索引的状态">4、显示当前db所有聚集索引的状态</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs abnf"><div class="hljs-line">db.printCollectionStats()<span class="hljs-comment">;</span>
+</div></code></pre>
+
+
+
+<h2 id="三用户相关">三、用户相关</h2>
+
+
+
+<h3 id="1添加一个用户">1、添加一个用户</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs less"><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.addUser</span>(<span class="hljs-string">"name"</span>); <span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.addUser</span>(<span class="hljs-string">"userName"</span>, <span class="hljs-string">"pwd123"</span>, true); <span class="hljs-comment">//添加用户、设置密码、是否只读</span>
+</div></code></pre>
+
+
+
+<h3 id="2数据库认证安全模式">2、数据库认证安全模式</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs less"><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.auth</span>(<span class="hljs-string">"userName"</span>, <span class="hljs-string">"123123"</span>);
+</div></code></pre>
+
+
+
+<h3 id="3显示当前所有用户">3、显示当前所有用户</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs sql"><div class="hljs-line"><span class="hljs-keyword">show</span> <span class="hljs-keyword">users</span>;
+</div></code></pre>
+
+
+
+<h3 id="4删除用户">4、删除用户</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs abnf"><div class="hljs-line">db.removeUser(<span class="hljs-string">"userName"</span>)<span class="hljs-comment">;</span>
+</div></code></pre>
+
+
+
+<h2 id="四聚集集合查询">四、聚集集合查询</h2>
+
+
+
+<h3 id="1查询所有记录">1、查询所有记录</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs pf"><div class="hljs-line">db.<span class="hljs-keyword">user</span>Info.find();  相当于：select* <span class="hljs-keyword">from</span> <span class="hljs-keyword">user</span>Info;
+</div></code></pre>
+
+<blockquote>
+  <p>默认每页显示20条记录，当显示不下的情况下，可以用it迭代命令查询下一页数据。注意：键入it命令不能带分号，但是你可以设置每页显示数据的大小，用DBQuery.shellBatchSize= 50;这样每页就显示50条记录了。</p>
+</blockquote>
+
+
+
+<h3 id="2查询去掉后的当前聚集集合中的某列的重复数据">2、查询去掉后的当前聚集集合中的某列的重复数据</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs q"><div class="hljs-line">db.userInfo.<span class="hljs-built_in">distinct</span>(<span class="hljs-string">"name"</span>);  <span class="hljs-comment">//会过滤掉name中的相同数据</span> 
+</div><div class="hljs-line">相当于 <span class="hljs-keyword">select</span> distict name <span class="hljs-keyword">from</span> userInfo;
+</div></code></pre>
+
+
+
+<h3 id="3查询age-22的记录">3、查询age = 22的记录</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs cs"><div class="hljs-line">db.userInfo.find({<span class="hljs-string">"age"</span>: <span class="hljs-number">22</span>}); 
+</div><div class="hljs-line">相当于： <span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> userInfo <span class="hljs-keyword">where</span> age = <span class="hljs-number">22</span>;
+</div></code></pre>
+
+
+
+<h3 id="4查询age-22的记录">4、查询age &gt; 22的记录</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs css"><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.userInfo</span><span class="hljs-selector-class">.find</span>({<span class="hljs-attribute">age</span>: {$gt: <span class="hljs-number">22</span>}});  
+</div><div class="hljs-line">相当于：<span class="hljs-selector-tag">select</span> * <span class="hljs-selector-tag">from</span> <span class="hljs-selector-tag">userInfo</span> <span class="hljs-selector-tag">where</span> <span class="hljs-selector-tag">age</span> &gt;22;
+</div></code></pre>
+
+
+
+<h3 id="5查询age-22的记录">5、查询age &lt; 22的记录</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs css"><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.userInfo</span><span class="hljs-selector-class">.find</span>({<span class="hljs-attribute">age</span>: {$lt: <span class="hljs-number">22</span>}}); 
+</div><div class="hljs-line">相当于：<span class="hljs-selector-tag">select</span> * <span class="hljs-selector-tag">from</span> <span class="hljs-selector-tag">userInfo</span> <span class="hljs-selector-tag">where</span> <span class="hljs-selector-tag">age</span> &lt;22;
+</div></code></pre>
+
+
+
+<h3 id="6查询age-25的记录">6、查询age &gt;= 25的记录</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs pf"><div class="hljs-line">db.<span class="hljs-keyword">user</span>Info.find({age: {<span class="hljs-variable">$gte</span>: <span class="hljs-number">25</span>}}); 
+</div><div class="hljs-line">相当于：select * <span class="hljs-keyword">from</span> <span class="hljs-keyword">user</span>Info where age &gt;= <span class="hljs-number">25</span>;
+</div></code></pre>
+
+
+
+<h3 id="7查询age-25的记录">7、查询age &lt;= 25的记录</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs css"><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.userInfo</span><span class="hljs-selector-class">.find</span>({<span class="hljs-attribute">age</span>: {$lte: <span class="hljs-number">25</span>}});
+</div></code></pre>
+
+
+
+<h3 id="8查询age-23-并且-age-26">8、查询age &gt;= 23 并且 age &lt;= 26</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs css"><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.userInfo</span><span class="hljs-selector-class">.find</span>({<span class="hljs-attribute">age</span>: {$gte: <span class="hljs-number">23</span>, $lte: <span class="hljs-number">26</span>}});
+</div></code></pre>
+
+
+
+<h3 id="9查询name中包含-mongo的数据">9、查询name中包含 mongo的数据</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs sqf"><div class="hljs-line">db.userInfo.<span class="hljs-built_in">find</span>({<span class="hljs-built_in">name</span>: /mongo/}); 
+</div><div class="hljs-line">相当于 <span class="hljs-built_in">select</span> * <span class="hljs-keyword">from</span> userInfo where <span class="hljs-built_in">name</span> like ‘%mongo%<span class="hljs-string">';</span>
+</div></code></pre>
+
+
+
+<h3 id="10查询name中以mongo开头的">10、查询name中以mongo开头的</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs sqf"><div class="hljs-line">db.userInfo.<span class="hljs-built_in">find</span>({<span class="hljs-built_in">name</span>: /^mongo/});
+</div><div class="hljs-line">相当于 <span class="hljs-built_in">select</span> * <span class="hljs-keyword">from</span> userInfo where <span class="hljs-built_in">name</span> like ‘mongo%<span class="hljs-string">';</span>
+</div></code></pre>
+
+
+
+<h3 id="11查询指定列nameage数据">11、查询指定列name、age数据</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs sqf"><div class="hljs-line">db.userInfo.<span class="hljs-built_in">find</span>({}, {<span class="hljs-built_in">name</span>: <span class="hljs-number">1</span>, age: <span class="hljs-number">1</span>});
+</div><div class="hljs-line"> 相当于：<span class="hljs-built_in">select</span> <span class="hljs-built_in">name</span>, age <span class="hljs-keyword">from</span> userInfo;
+</div><div class="hljs-line">  <span class="hljs-built_in">name</span>可以用<span class="hljs-literal">true</span>或<span class="hljs-literal">false</span>,当用ture的情况下河<span class="hljs-built_in">name</span>:<span class="hljs-number">1</span>效果一样，如果用<span class="hljs-literal">false</span>就是排除<span class="hljs-built_in">name</span>，显示<span class="hljs-built_in">name</span>以外的列信息。 
+</div></code></pre>
+
+
+
+<h3 id="12查询指定列nameage数据age-25">12、查询指定列name，age数据,age &gt; 25</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs css"><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.userInfo</span><span class="hljs-selector-class">.find</span>({<span class="hljs-attribute">age</span>: {$gt: <span class="hljs-number">25</span>}}, {<span class="hljs-attribute">name</span>: <span class="hljs-number">1</span>, age: <span class="hljs-number">1</span>});
+</div><div class="hljs-line"> 相当于：<span class="hljs-selector-tag">select</span> <span class="hljs-selector-tag">name</span>, <span class="hljs-selector-tag">age</span> <span class="hljs-selector-tag">from</span> <span class="hljs-selector-tag">userInfo</span> <span class="hljs-selector-tag">where</span> <span class="hljs-selector-tag">age</span> &gt;25;
+</div></code></pre>
+
+
+
+<h3 id="13按照年龄排序">13、按照年龄排序</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs css"><div class="hljs-line">升序：<span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.userInfo</span><span class="hljs-selector-class">.find</span>()<span class="hljs-selector-class">.sort</span>({<span class="hljs-attribute">age</span>: <span class="hljs-number">1</span>}); 
+</div><div class="hljs-line">降序：<span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.userInfo</span><span class="hljs-selector-class">.find</span>()<span class="hljs-selector-class">.sort</span>({<span class="hljs-attribute">age</span>: -<span class="hljs-number">1</span>});
+</div></code></pre>
+
+
+
+<h3 id="14查询name-zhangsan-age-22的数据">14、查询name = zhangsan, age = 22的数据</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs sqf"><div class="hljs-line">db.userInfo.<span class="hljs-built_in">find</span>({<span class="hljs-built_in">name</span>: <span class="hljs-string">'zhangsan'</span>, age: <span class="hljs-number">22</span>}); 
+</div><div class="hljs-line">相当于：<span class="hljs-built_in">select</span> * <span class="hljs-keyword">from</span> userInfo where <span class="hljs-built_in">name</span> = ‘zhangsan<span class="hljs-string">' and age = ‘22'</span>;
+</div></code></pre>
+
+
+
+<h3 id="15查询前5条数据">15、查询前5条数据</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs pf"><div class="hljs-line">db.<span class="hljs-keyword">user</span>Info.find().<span class="hljs-keyword">limit</span>(<span class="hljs-number">5</span>); 
+</div><div class="hljs-line">相当于：selecttop <span class="hljs-number">5</span> * <span class="hljs-keyword">from</span> <span class="hljs-keyword">user</span>Info;
+</div></code></pre>
+
+
+
+<h3 id="16查询10条以后的数据">16、查询10条以后的数据</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs sql"><div class="hljs-line">db.userInfo.find().skip(10); 
+</div><div class="hljs-line">相当于：<span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> userInfo <span class="hljs-keyword">where</span> <span class="hljs-keyword">id</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> ( selecttop <span class="hljs-number">10</span> * <span class="hljs-keyword">from</span> userInfo );
+</div></code></pre>
+
+
+
+<h3 id="17查询在5-10之间的数据">17、查询在5-10之间的数据</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs pf"><div class="hljs-line">db.<span class="hljs-keyword">user</span>Info.find().<span class="hljs-keyword">limit</span>(<span class="hljs-number">10</span>).<span class="hljs-keyword">skip</span>(<span class="hljs-number">5</span>);    //可用于分页，<span class="hljs-keyword">limit</span>是pageSize，<span class="hljs-keyword">skip</span>是第几页 * pageSize
+</div></code></pre>
+
+
+
+<h3 id="18or与-查询">18、or与 查询</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs q"><div class="hljs-line">db.userInfo.find({$<span class="hljs-built_in">or</span>: [{age: <span class="hljs-number">22</span>}, {age: <span class="hljs-number">25</span>}]}); 
+</div><div class="hljs-line">相当于：<span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> userInfo <span class="hljs-built_in">where</span> age = <span class="hljs-number">22</span> <span class="hljs-built_in">or</span> age = <span class="hljs-number">25</span>;
+</div></code></pre>
+
+
+
+<h3 id="19查询第一条数据">19、查询第一条数据</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs pf"><div class="hljs-line">db.<span class="hljs-keyword">user</span>Info.findOne();
+</div><div class="hljs-line"> 相当于：select * <span class="hljs-keyword">from</span> <span class="hljs-keyword">user</span>Info <span class="hljs-keyword">limit</span> <span class="hljs-number">1</span>;
+</div></code></pre>
+
+
+
+<h3 id="20查询某个结果集的记录条数">20、查询某个结果集的记录条数</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs q"><div class="hljs-line">db.userInfo.find({age: {$gte: <span class="hljs-number">25</span>}}).<span class="hljs-built_in">count</span>(); 
+</div><div class="hljs-line">相当于：<span class="hljs-keyword">select</span> <span class="hljs-built_in">count</span>(*) <span class="hljs-keyword">from</span> userInfo <span class="hljs-built_in">where</span> age &gt;= <span class="hljs-number">20</span>;
+</div></code></pre>
+
+
+
+<h3 id="21按照某列进行排序">21、按照某列进行排序</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs sqf"><div class="hljs-line">db.userInfo.<span class="hljs-built_in">find</span>({sex ：{$exists：<span class="hljs-literal">true</span>}}).<span class="hljs-built_in">count</span>();
+</div><div class="hljs-line">相当于：<span class="hljs-built_in">select</span> <span class="hljs-built_in">count</span>(sex) <span class="hljs-keyword">from</span> userInfo;
+</div></code></pre>
+
+
+
+<h2 id="五索引">五、索引</h2>
+
+
+
+<h3 id="1创建索引">1、创建索引</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs css"><div class="hljs-line"><span class="hljs-selector-tag">db</span> <span class="hljs-selector-class">.userInfo</span><span class="hljs-selector-class">.ensureIndex</span>({<span class="hljs-attribute">name</span>: <span class="hljs-number">1</span>});
+</div><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.userInfo</span><span class="hljs-selector-class">.ensureIndex</span>({<span class="hljs-attribute">name</span>: <span class="hljs-number">1</span>, ts: -<span class="hljs-number">1</span>});
+</div></code></pre>
+
+
+
+<h3 id="2查询当前聚集集合所有索引">2、查询当前聚集集合所有索引</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs css"><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.userInfo</span><span class="hljs-selector-class">.getIndexes</span>();
+</div></code></pre>
+
+
+
+<h3 id="3查看总索引记录大小">3、查看总索引记录大小</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs css"><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.userInfo</span><span class="hljs-selector-class">.totalIndexSize</span>();
+</div></code></pre>
+
+
+
+<h3 id="4读取当前集合的所有index信息">4、读取当前集合的所有index信息</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs css"><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.users</span><span class="hljs-selector-class">.reIndex</span>();
+</div></code></pre>
+
+
+
+<h3 id="5删除指定索引">5、删除指定索引</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs abnf"><div class="hljs-line">db.users.dropIndex(<span class="hljs-string">"name_1"</span>)<span class="hljs-comment">;</span>
+</div></code></pre>
+
+
+
+<h3 id="6删除所有索引索引">6、删除所有索引索引</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs css"><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.users</span><span class="hljs-selector-class">.dropIndexes</span>();
+</div></code></pre>
+
+
+
+<h2 id="六-修改添加删除集合数据">六 、修改、添加、删除集合数据</h2>
+
+
+
+<h3 id="1添加的数据的数据列没有固定根据添加的数据为准">1、添加的数据的数据列没有固定,根据添加的数据为准</h3>
+
+<pre class="prettyprint hljs-dark"><code class="hljs css"><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.users</span><span class="hljs-selector-class">.save</span>({<span class="hljs-attribute">name</span>: ‘zhangsan<span class="hljs-string">', age: 25, sex: true});</span>
+</div></code></pre>
+
+
+
+<h3 id="2修改">2、修改</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs xquery"><div class="hljs-line">db.users.<span class="hljs-keyword">update</span>({age: <span class="hljs-number">25</span>}, {$set: {name: <span class="hljs-string">'changeName'</span>}}, <span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>); 
+</div><div class="hljs-line">相当于：<span class="hljs-keyword">update</span> users set name = ‘changeName<span class="hljs-string">' where age = 25;
+</span></div><div class="hljs-line">
+</div><div class="hljs-line"> db.users.update({name: 'Lisi<span class="hljs-string">'}, {$inc: {age: 50}}, false, true); 
+</span></div><div class="hljs-line"> 相当于：update users set age = age + 50 where name = ‘Lisi'; 
+</div><div class="hljs-line"> 
+</div><div class="hljs-line"> db.users.<span class="hljs-keyword">update</span>({name: <span class="hljs-string">'Lisi'</span>}, {$inc: {age: <span class="hljs-number">50</span>}, $set: {name: <span class="hljs-string">'hoho'</span>}}, <span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>); 
+</div><div class="hljs-line"> 相当于：<span class="hljs-keyword">update</span> users set age = age + <span class="hljs-number">50</span>, name = ‘hoho<span class="hljs-string">' where name = ‘Lisi'</span>;
+</div><div class="hljs-line"> 
+</div></code></pre>
+
+
+
+<h3 id="3删除">3、删除</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs css"><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.users</span><span class="hljs-selector-class">.remove</span>({<span class="hljs-attribute">age</span>: <span class="hljs-number">132</span>});
+</div></code></pre>
+
+
+
+<h3 id="4查询修改删除">4、查询修改删除</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs xquery"><div class="hljs-line">db.users.findAndModify(
+</div><div class="hljs-line">    {
+</div><div class="hljs-line"> query: {age: {$gte: <span class="hljs-number">25</span>}},
+</div><div class="hljs-line"> sort: {age: -<span class="hljs-number">1</span>}, 
+</div><div class="hljs-line"> update: {$set: {name: <span class="hljs-string">'a2'</span>}, $inc: {age: <span class="hljs-number">2</span>}}, 
+</div><div class="hljs-line"> remove: true 
+</div><div class="hljs-line">    }
+</div><div class="hljs-line">); 
+</div><div class="hljs-line">
+</div><div class="hljs-line">db.runCommand(
+</div><div class="hljs-line">    { 
+</div><div class="hljs-line">        findandmodify : <span class="hljs-string">"users"</span>,
+</div><div class="hljs-line">        query: {age: {$gte: <span class="hljs-number">25</span>}},  
+</div><div class="hljs-line">        sort: {age: -<span class="hljs-number">1</span>}, 
+</div><div class="hljs-line">        update: {$set: {name: <span class="hljs-string">'a2'</span>},
+</div><div class="hljs-line">        $inc: {age: <span class="hljs-number">2</span>}}, 
+</div><div class="hljs-line">        remove: true 
+</div><div class="hljs-line">    }
+</div><div class="hljs-line">);
+</div></code></pre>
+
+
+
+<h2 id="七语句块操作">七、语句块操作</h2>
+
+
+
+<h3 id="1简单hello-world">1、简单Hello World</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs bash"><div class="hljs-line"><span class="hljs-built_in">print</span>(<span class="hljs-string">"Hello World!"</span>);   //这种写法调用了<span class="hljs-built_in">print</span>函数，和直接写入<span class="hljs-string">"Hello World!"</span>的效果是一样的
+</div></code></pre>
+
+
+
+<h3 id="2将一个对象转换成json">2、将一个对象转换成json</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs lisp"><div class="hljs-line">tojson(<span class="hljs-name">new</span> Object())<span class="hljs-comment">;</span> tojson(<span class="hljs-name">new</span> Object('a'))<span class="hljs-comment">;</span>
+</div></code></pre>
+
+
+
+<h3 id="3循环添加数据">3、循环添加数据</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs less"><div class="hljs-line">循环添加了<span class="hljs-selector-tag">30</span>条数据，同样也可以省略括号的写法
+</div><div class="hljs-line"><span class="hljs-selector-tag">for</span> (var i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">30</span>; i++) { ... 
+</div><div class="hljs-line">    <span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.users</span><span class="hljs-selector-class">.save</span>({<span class="hljs-attribute">name</span>: <span class="hljs-string">"u_"</span> + i, <span class="hljs-attribute">age</span>: <span class="hljs-number">22</span> + i, <span class="hljs-attribute">sex</span>: i % <span class="hljs-number">2</span>}); 
+</div><div class="hljs-line">...};
+</div></code></pre>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs less"><div class="hljs-line"> 也是可以的，当你用<span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.users</span><span class="hljs-selector-class">.find</span>()查询的时候，显示多条数据而无法一页显示的情况下，可以用<span class="hljs-selector-tag">it</span>查看下一页的信息；
+</div><div class="hljs-line"><span class="hljs-selector-tag">for</span> (var i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">30</span>; i++) <span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.users</span><span class="hljs-selector-class">.save</span>({<span class="hljs-attribute">name</span>: <span class="hljs-string">"u_"</span> + i, <span class="hljs-attribute">age</span>: <span class="hljs-number">22</span> + i, <span class="hljs-attribute">sex</span>: i % <span class="hljs-number">2</span>});
+</div></code></pre>
+
+
+
+<h3 id="4find-游标查询">4、find 游标查询</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs arduino"><div class="hljs-line">  这样就查询所有的users信息，同样可以这样写
+</div><div class="hljs-line">var <span class="hljs-built_in">cursor</span> = db.users.<span class="hljs-built_in">find</span>();
+</div><div class="hljs-line"> <span class="hljs-built_in">while</span> (<span class="hljs-built_in">cursor</span>.hasNext()) {
+</div><div class="hljs-line"> printjson(<span class="hljs-built_in">cursor</span>.next);
+</div><div class="hljs-line"> }
+</div></code></pre>
+
+
+
+<h3 id="5foreach迭代循环">5、forEach迭代循环</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs css"><div class="hljs-line"> <span class="hljs-selector-tag">forEach</span>中必须传递一个函数来处理每条迭代的数据信息 
+</div><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.users</span><span class="hljs-selector-class">.find</span>()<span class="hljs-selector-class">.forEach</span>(<span class="hljs-selector-tag">printjson</span>);
+</div></code></pre>
+
+
+
+<h3 id="6将find游标当数组处理">6、将find游标当数组处理</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs matlab"><div class="hljs-line"> 取得下标索引为<span class="hljs-number">4</span>的那条数据 既然可以当做数组处理，那么就可以获得它的长度：cursor.<span class="hljs-built_in">length</span>();或者cursor.count(); 
+</div><div class="hljs-line">var cursor = db.users.<span class="hljs-built_in">find</span>();
+</div><div class="hljs-line"> cursor[<span class="hljs-number">4</span>];
+</div><div class="hljs-line">
+</div><div class="hljs-line"> 那样我们也可以用循环显示数据
+</div><div class="hljs-line"><span class="hljs-keyword">for</span> (var <span class="hljs-built_in">i</span> = <span class="hljs-number">0</span>, len = c.<span class="hljs-built_in">length</span>(); <span class="hljs-built_in">i</span> &lt; len; <span class="hljs-built_in">i</span>++) printjson(c[i]);
+</div><div class="hljs-line">
+</div></code></pre>
+
+
+
+<h3 id="7将find游标转换成数组">7、将find游标转换成数组</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs sqf"><div class="hljs-line">  用<span class="hljs-built_in">toArray</span>方法将其转换为数组 
+</div><div class="hljs-line">var arr = db.users.<span class="hljs-built_in">find</span>().<span class="hljs-built_in">toArray</span>(); 
+</div><div class="hljs-line">printjson(arr[<span class="hljs-number">2</span>]);
+</div></code></pre>
+
+
+
+<h3 id="8定制我们自己的查询结果">8、定制我们自己的查询结果</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs xquery"><div class="hljs-line"> 只显示age&lt;=<span class="hljs-number">28</span>的并且只显示age这列数据
+</div><div class="hljs-line"> 
+</div><div class="hljs-line">db.users.find({age: {$lte: <span class="hljs-number">28</span>}}, {age: <span class="hljs-number">1</span>}).forEach(printjson);
+</div><div class="hljs-line">
+</div><div class="hljs-line">或
+</div><div class="hljs-line">
+</div><div class="hljs-line"> db.users.find({age: {$lte: <span class="hljs-number">28</span>}}, {age: true}).forEach(printjson);
+</div></code></pre>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs css"><div class="hljs-line"> 排除<span class="hljs-selector-tag">age</span>的列
+</div><div class="hljs-line"><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.users</span><span class="hljs-selector-class">.find</span>({<span class="hljs-attribute">age</span>: {$lte: <span class="hljs-number">28</span>}}, {<span class="hljs-attribute">age</span>: false})<span class="hljs-selector-class">.forEach</span>(<span class="hljs-selector-tag">printjson</span>);
+</div></code></pre>
+
+
+
+<h3 id="9foreach传递函数显示信息">9、forEach传递函数显示信息</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs php"><div class="hljs-line">db.things.find({x:<span class="hljs-number">4</span>}).<span class="hljs-keyword">forEach</span>(
+</div><div class="hljs-line">    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(x)</span> </span>{
+</div><div class="hljs-line">        <span class="hljs-keyword">print</span>(tojson(x));
+</div><div class="hljs-line">    }
+</div><div class="hljs-line">);
+</div></code></pre>
+
+
+
+<h2 id="八其他">八、其他</h2>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs stata"><div class="hljs-line"><span class="hljs-keyword">db</span>.getPrevError();  <span class="hljs-comment">//查询之前的错误信息</span>
+</div><div class="hljs-line">
+</div><div class="hljs-line"><span class="hljs-keyword">db</span>.resetError();    <span class="hljs-comment">//清除错误记录</span>
+</div><div class="hljs-line">
+</div><div class="hljs-line"><span class="hljs-keyword">db</span>.yourColl.<span class="hljs-keyword">help</span>();     <span class="hljs-comment">//查看帮助</span>
+</div><div class="hljs-line">
+</div><div class="hljs-line"><span class="hljs-keyword">db</span>.yourColl.<span class="hljs-keyword">count</span>();    <span class="hljs-comment">//查询当前集合的数据条数  </span>
+</div><div class="hljs-line">
+</div><div class="hljs-line">  <span class="hljs-keyword">db</span>.userInfo.dataSize();  <span class="hljs-comment">//查看数据空间大小</span>
+</div><div class="hljs-line">  
+</div><div class="hljs-line"><span class="hljs-keyword">db</span>.userInfo.getDB();    <span class="hljs-comment">//得到当前聚集集合所在的db</span>
+</div><div class="hljs-line">
+</div><div class="hljs-line"><span class="hljs-keyword">db</span>.userInfo.stats();   <span class="hljs-comment">//得到当前聚集的状态</span>
+</div><div class="hljs-line">
+</div><div class="hljs-line">   <span class="hljs-keyword">db</span>.userInfo.totalSize();  <span class="hljs-comment">//得到聚集集合总大小</span>
+</div><div class="hljs-line">   
+</div><div class="hljs-line">  <span class="hljs-keyword">db</span>.userInfo.storageSize();  <span class="hljs-comment">//聚集集合储存空间大小</span>
+</div><div class="hljs-line">  
+</div><div class="hljs-line"> <span class="hljs-keyword">db</span>.userInfo.getShardVersion() ;    <span class="hljs-comment">//Shard版本信息</span>
+</div><div class="hljs-line"> 
+</div><div class="hljs-line"><span class="hljs-keyword">db</span>.userInfo.renameCollection(<span class="hljs-string">"users"</span>);  <span class="hljs-comment">//</span>   聚集集合重命名,将userInfo重命名为users 
+</div><div class="hljs-line">
+</div><div class="hljs-line"><span class="hljs-keyword">db</span>.userInfo.<span class="hljs-keyword">drop</span>();     <span class="hljs-comment">//</span>   删除当前聚集集合
+</div><div class="hljs-line">
+</div><div class="hljs-line">show dbs; <span class="hljs-comment">//显示数据库列表</span>
+</div><div class="hljs-line">
+</div><div class="hljs-line">show collections <span class="hljs-comment">//显示当前数据库中的集合（类似关系数据库中的表）</span>
+</div><div class="hljs-line">
+</div><div class="hljs-line">show users <span class="hljs-comment">//显示用户 </span> <span class="hljs-keyword">use</span> &lt;<span class="hljs-keyword">db</span> name&gt;：切换当前数据库，这和MS-SQL里面的意思一样
+</div><div class="hljs-line">
+</div><div class="hljs-line"> <span class="hljs-keyword">db</span>.<span class="hljs-keyword">help</span>()  <span class="hljs-comment">//显示数据库操作命令，里面有很多的命令</span>
+</div><div class="hljs-line"> 
+</div><div class="hljs-line"><span class="hljs-keyword">db</span>.foo.<span class="hljs-keyword">help</span>() <span class="hljs-comment">//显示集合操作命令，同样有很多的命令，foo指的是当前数据库下，一个叫foo的集合，并非真正意义上的命令</span>
+</div><div class="hljs-line">
+</div><div class="hljs-line"><span class="hljs-keyword">db</span>.foo.find() <span class="hljs-comment">//对于当前数据库中的foo集合进行数据查找（由于没有条件，会列出所有数据） </span>
+</div><div class="hljs-line">
+</div><div class="hljs-line"> <span class="hljs-keyword">db</span>.foo.find({a:1})  <span class="hljs-comment">//对于当前数据库中的foo集合进行查找，条件是数据中有一个属性叫a，且a的值为1</span>
+</div></code></pre></div></body></html>
